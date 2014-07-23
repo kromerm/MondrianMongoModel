@@ -716,7 +716,7 @@ public class MainJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuMakeModelActionPerformed
 
     private void jButtonOlap4jActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOlap4jActionPerformed
-        // TODO add your handling code here:
+        // Append to olap4j.properties
         if (jTextArea1.getText().length() < 1) {
             JOptionPane.showMessageDialog(this,"Create your cube and select File | Make Model before updating olap4j.properties", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
@@ -781,7 +781,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(this," Contact: Mark Kromer \n mark_kromer@mail.com", "Mongo Model Generator", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this," Version 1.0 \n Contact: Mark Kromer \n mark_kromer@mail.com", "Mongo Model Generator", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed

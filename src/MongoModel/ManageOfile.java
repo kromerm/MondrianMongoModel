@@ -5,6 +5,7 @@
 package MongoModel;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -39,8 +40,15 @@ public class ManageOfile extends javax.swing.JFrame {
         }
         
         String olap4j = (String)JOptionPane.showInputDialog(null, "Enter the path location of olap4j.properties", "olap4j.properties", JOptionPane.QUESTION_MESSAGE,null,null,config.getProperty("olap4j"));
-        config.setProperty("olap4j", olap4j);
-        ofile = olap4j.toString()+"olap4j.properties";        
+        
+        // Save that new config
+        try {
+            config.setProperty("olap4j", olap4j);
+            config.save();
+        } catch (Exception e) {}
+        
+        // Make sure it has the proper file separator
+        ofile = olap4j.toString()+File.separator+"olap4j.properties";        
         data = new DefaultListModel();
         int i=0;
         
@@ -153,27 +161,35 @@ public class ManageOfile extends javax.swing.JFrame {
         String newfile = new String ("olap4j.properties");
         
         // Clean-up the olap4j.properties connections file
-        for (String value:values)
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(ofile));
+            PrintWriter out = new PrintWriter(newfile);
+            String line=new String();
+            while ((line = br.readLine()) != null) {                
+                
+                // Get out if it's an empty line
+                if (line.length() < 2) continue;
+                
+                // if there are comments, just copy them
+                if (line.charAt(0) == '#') { out.println(line); continue; }
+                
+                // if there are no "."'s then print & continue
+                if (!line.contains(".")) { out.println(line); continue; }
+                
+                // else, split on name
+                String [] value = line.split("\\.");
+                
+                // get out of town is there are no strings in value
+                if (value.length < 1) continue;
+                if (!values.contains(value[0])) out.println(line);                        
+            }               
+            br.close();            
+            out.close();
+        } catch (Exception e)
         {
-            try {
-                BufferedReader br = new BufferedReader(new FileReader(ofile));
-                PrintWriter out = new PrintWriter(newfile);
-                String line=new String();
-                while ((line = br.readLine()) != null) {
-                    if (!line.contains(value)) {
-                        try {                        
-                            out.println(line);                        
-                        } catch (Exception e) {}
-                    }
-                }
-                br.close();            
-                out.close();
-            } catch (Exception e)
-            {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(this,e.getMessage(), value, JOptionPane.WARNING_MESSAGE);                     
-            }
-        }  
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this,e.getMessage(), "Delete model", JOptionPane.WARNING_MESSAGE);                     
+        }
 
         
         String outs= "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
