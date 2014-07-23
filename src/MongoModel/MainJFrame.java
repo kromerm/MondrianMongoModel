@@ -759,7 +759,7 @@ public class MainJFrame extends javax.swing.JFrame {
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         //olap4j = JOptionPane.showInputDialog(null, "Enter the path location of olap4j.properties", "olap4j.properties", 1);
         jSettings frame = new jSettings();
-        frame.setAlwaysOnTop(true);
+        //frame.setAlwaysOnTop(true);
         frame.setResizable(true);
         //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setLocationRelativeTo(getRootPane());        
@@ -771,7 +771,7 @@ public class MainJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         // Launch dialog to manage olap4j.properties connections file
         ManageOfile frame = new ManageOfile ();
-        frame.setAlwaysOnTop(true);
+        //frame.setAlwaysOnTop(true);
         frame.setResizable(true);
         //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setLocationRelativeTo(getRootPane());        
@@ -799,7 +799,7 @@ public class MainJFrame extends javax.swing.JFrame {
         
         Editor frame = new Editor ();
         
-        frame.setAlwaysOnTop(true);
+        //frame.setAlwaysOnTop(true);
         frame.setResizable(true);
         //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setLocationRelativeTo(getRootPane());        
