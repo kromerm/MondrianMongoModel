@@ -11,9 +11,9 @@
   </resources>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="MongoModel.jar" size="71282" download="eager" />
-    <jar href="lib/mongo-java-driver-2.12.2.jar" size="637740" download="eager" />
-    <jar href="lib/xml-text-editor-0.0.3.jar" size="11451" download="eager" />
+    <jar href="MongoModel.jar" size="71254" download="eager" />
+    <jar href="lib/mongo-java-driver-2.12.2.jar" size="637739" download="eager" />
+    <jar href="lib/xml-text-editor-0.0.3.jar" size="11455" download="eager" />
   </resources>
 <security>
   <all-permissions/>

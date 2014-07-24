@@ -528,7 +528,7 @@ public class MainJFrame extends javax.swing.JFrame {
         DefaultListModel data = new DefaultListModel ();
         for (int i=0; i < meas.size(); i++)
         {
-            if (i != jList4.getSelectedIndex())
+            //if (i != jList4.getSelectedIndex())
                 data.add(i,meas.get(i));            
         }
         jList4.setModel(data);
@@ -550,7 +550,7 @@ public class MainJFrame extends javax.swing.JFrame {
         DefaultListModel data = new DefaultListModel ();
         for (int i=0; i < dims.size(); i++)
         {
-            if (i != jList5.getSelectedIndex())
+            //if (i != jList5.getSelectedIndex())
                 data.add(i,dims.get(i));            
         }
         jList5.setModel(data);
