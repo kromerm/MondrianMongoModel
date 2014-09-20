@@ -28,6 +28,7 @@ import java.io.PrintWriter;
 import java.net.URL;
 import javax.swing.*;
 import java.util.*;
+import org.json.*;
 
 /**
  *
@@ -97,6 +98,7 @@ public class MainJFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Mongo Model Generator");
+        setResizable(false);
 
         jTextField1.setText("localhost");
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
@@ -448,23 +450,60 @@ public class MainJFrame extends javax.swing.JFrame {
         int i=0;
         try {        
             while(cursor.hasNext()) {                
-                String s1=cursor.next().toString();
-                StringTokenizer st = new StringTokenizer (s1,":");
-                while (st.hasMoreTokens()) {
-                    String s2=st.nextToken();
-                    if (s2.contains(",")) {
-                        String s3=s2.split(",")[1];
-                        s3=s3.replace("\"","");
-                        s3=s3.trim();
-                        if (!data.contains(s3)){
-                            data.add(i,s3);
+               String s1=cursor.next().toString();
+               JSONObject jobj = new JSONObject (s1);
+               JSONArray ja  = jobj.names();
+                
+               // find & parse field names from JSON document sampling               
+                for (int x=0;x<ja.length();x++) {                              
+                    String s2 = ja.get(x).toString();
+
+                   // Check to see if the field is an array JSON type
+                   JSONArray category=null;
+                   category=jobj.optJSONArray(s2);
+                    
+                   //yes, this is an array field
+                   if(category != null)
+                    {
+                        // save original array name
+                        String s3=s2;
+
+                        s2=s3+"[*]";
+                        if (!data.contains(s2)){
+                            data.add(i,s2);
                             i++;
-                        }      
-                    }
-                }
+                        }
+                        
+                        // get field list from first index in array
+                        JSONObject jobj1 = new JSONObject (category.get(0).toString());
+                        JSONArray ja1 = jobj1.names();
+                        
+                        for (int y=0; y<ja1.length();y++)
+                        {
+                            s2=s3+"[*]."+ja1.get(y);
+                            if (!data.contains(s2)){
+                                data.add(i,s2);
+                                i++;
+                            }     // end if     
+                            //JOptionPane.showMessageDialog(this,s2, "Success", JOptionPane.INFORMATION_MESSAGE);
+                        } // next
+                     } // end if category
+                   // no, it's not an array type
+                   else {
+                        if (!data.contains(s2)){
+                            data.add(i,s2);
+                            i++;
+                        }     // end if     
+                   } // end if-then-else
+                }              
+               
                 if (i > 5) break;
             }
-        } finally { cursor.close(); }
+        }
+        
+        catch (Exception e) {}
+        
+        finally { cursor.close(); }
 
         jList3.setModel(data);
 	
@@ -503,8 +542,6 @@ public class MainJFrame extends javax.swing.JFrame {
         String mys=jList3.getSelectedValue().toString();
 
         if (dims.contains(mys)) return;
-        
-       //JOptionPane.showMessageDialog(this,mys, "Success", JOptionPane.INFORMATION_MESSAGE);
         
         dims.add(mys);
 
@@ -592,6 +629,10 @@ public class MainJFrame extends javax.swing.JFrame {
             f1=f1.toLowerCase();
             f1=f1.substring(0,1).toUpperCase()+f1.substring(1);
             
+            if (f1.contains("[*]")){
+                f1=f1.replace("[*]", "");
+            }
+            
              sfinal+="       <CalculatedColumnDef name='"+f1+"' type=\"Numeric\" >\n" +
                     "          <ExpressionView >\n" +
                     "            <SQL dialect='generic'>\n" +
@@ -610,6 +651,12 @@ public class MainJFrame extends javax.swing.JFrame {
             f1=f1.replace("_", " ");
             f1=f1.toLowerCase();
             f1=f1.substring(0,1).toUpperCase()+f1.substring(1);
+
+            // modify array field names
+            if (f1.contains("[*]")){
+                f1=f1.replace("[*]", "");
+            }
+
             
              sfinal+="       <CalculatedColumnDef name='"+f1+"' type=\"String\" >\n" +
                     "          <ExpressionView >\n" +
@@ -715,6 +762,7 @@ public class MainJFrame extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jMenuMakeModelActionPerformed
 
+    
     private void jButtonOlap4jActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOlap4jActionPerformed
         // Append to olap4j.properties
         if (jTextArea1.getText().length() < 1) {
