@@ -26,6 +26,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.sql.Timestamp;
 import javax.swing.*;
 import java.util.*;
 import org.json.*;
@@ -36,6 +37,7 @@ import org.json.*;
  */
 public class MainJFrame extends javax.swing.JFrame {
 
+    static int DEFAULTSAMPLE = 15; // default sampling
     List <String> dbs;
     ArrayList <String> meas = new ArrayList <String>();
     ArrayList <String> dims = new ArrayList <String>();
@@ -446,64 +448,80 @@ public class MainJFrame extends javax.swing.JFrame {
         collection = db.getCollection (jList2.getSelectedValue().toString());
         DBCursor cursor = collection.find(query);
         DefaultListModel data = new DefaultListModel();
-                
-        int i=0;
-        try {        
-            while(cursor.hasNext()) {                
-               String s1=cursor.next().toString();
-               JSONObject jobj = new JSONObject (s1);
-               JSONArray ja  = jobj.names();
-                
-               // find & parse field names from JSON document sampling               
-                for (int x=0;x<ja.length();x++) {                              
-                    String s2 = ja.get(x).toString();
+    
+        int i=0;         // count # of fields
+        int sampled=DEFAULTSAMPLE;
 
-                   // Check to see if the field is an array JSON type
-                   JSONArray category=null;
-                   category=jobj.optJSONArray(s2);
-                    
-                   //yes, this is an array field
-                   if(category != null)
-                    {
-                        // save original array name
-                        String s3=s2;
-
-                        s2=s3+"[*]";
-                        if (!data.contains(s2)){
-                            data.add(i,s2);
-                            i++;
-                        }
-                        
-                        // get field list from first index in array
-                        JSONObject jobj1 = new JSONObject (category.get(0).toString());
-                        JSONArray ja1 = jobj1.names();
-                        
-                        for (int y=0; y<ja1.length();y++)
-                        {
-                            s2=s3+"[*]."+ja1.get(y);
-                            if (!data.contains(s2)){
-                                data.add(i,s2);
-                                i++;
-                            }     // end if     
-                            //JOptionPane.showMessageDialog(this,s2, "Success", JOptionPane.INFORMATION_MESSAGE);
-                        } // next
-                     } // end if category
-                   // no, it's not an array type
-                   else {
-                        if (!data.contains(s2)){
-                            data.add(i,s2);
-                            i++;
-                        }     // end if     
-                   } // end if-then-else
-                }              
-               
-                if (i > 5) break;
+         try {
+            config = new ConfigurationManager ("MongoModel.xml");
+            int jj=0;
+            jj = Integer.parseInt(config.getProperty("sampling"));
+            if (jj < 1) {
+                sampled = DEFAULTSAMPLE;
             }
+            else {
+                sampled=jj;
+            }
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this,e.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);         
+            sampled=DEFAULTSAMPLE;
         }
+
+        java.util.Date date= new java.util.Date();
+	jTextArea1.setText(new Timestamp(date.getTime())+": SAMPLING documents in MongoDB: "+ sampled );
         
-        catch (Exception e) {}
-        
-        finally { cursor.close(); }
+        while(cursor.hasNext()) {         
+            if (sampled-- < 0) break;
+           String s1=cursor.next().toString();
+           try {
+               JSONObject jobj = new JSONObject (s1);
+           
+               JSONArray ja  = jobj.names();
+
+           // find & parse field names from JSON document sampling               
+            for (int x=0;x<ja.length();x++) {                              
+                String s2 = ja.get(x).toString();
+
+               // Check to see if the field is an array JSON type
+               JSONArray category=null;
+               category=jobj.optJSONArray(s2);
+
+               //yes, this is an array field
+               if(category != null)
+                {
+                    // save original array name
+                    String s3=s2;
+
+                    s2=s3+"[*]";
+                    if (!data.contains(s2)){
+                        data.add(i++,s2);                            
+                    }
+
+                    // get field list from first index in array
+                    JSONObject jobj1 = new JSONObject (category.get(0).toString());
+                    JSONArray ja1 = jobj1.names();
+
+                    for (int y=0; y<ja1.length();y++)
+                    {
+                        s2=s3+"[*]."+ja1.get(y);
+                        if (!data.contains(s2)){
+                            data.add(i++,s2);                                
+                        }     // end if     
+                     } // next
+                 } // end if category
+               // no, it's not an array type
+               else {
+                    if (!data.contains(s2)){
+                        data.add(i++,s2);                       
+                    }     // end if     
+               } // end if-then-else
+            }  // next    
+          } catch (JSONException je) {}
+        } // next
+
+        cursor.close();
 
         jList3.setModel(data);
 	

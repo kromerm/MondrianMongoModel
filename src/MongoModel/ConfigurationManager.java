@@ -36,8 +36,8 @@ public class ConfigurationManager {
     }
     
     private void setDefaults() {
-        properties.put("olap4j", "C:\\Pentaho\\server\\biserver-ee\\pentaho-solutions\\system\\");
-        properties.put("mondrian", "C:\\Pentaho\\server\\biserver-ee\\pentaho-solutions\\system\\");
+        properties.put("olap4j", "C:\\Program Files\\Pentaho\\server\\biserver-ee\\pentaho-solutions\\system\\");
+        properties.put("mondrian", "C:\\Program Files\\Pentaho\\server\\biserver-ee\\pentaho-solutions\\system\\");
     }
     
     public void save() throws IOException {
