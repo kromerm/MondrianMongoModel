@@ -11,11 +11,11 @@
   </resources>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="MongoModel.jar" size="72916" download="eager" />
-    <jar href="lib/javax.json-api-1.0.jar" size="23604" download="eager" />
-    <jar href="lib/mongo-java-driver-2.12.2.jar" size="637739" download="eager" />
-    <jar href="lib/org.json-20120521.jar" size="43041" download="eager" />
-    <jar href="lib/xml-text-editor-0.0.3.jar" size="11451" download="eager" />
+    <jar href="MongoModel.jar" size="73114" download="eager" />
+    <jar href="lib/javax.json-api-1.0.jar" size="23606" download="eager" />
+    <jar href="lib/mongo-java-driver-2.12.2.jar" size="637738" download="eager" />
+    <jar href="lib/org.json-20120521.jar" size="43042" download="eager" />
+    <jar href="lib/xml-text-editor-0.0.3.jar" size="11452" download="eager" />
   </resources>
 <security>
   <all-permissions/>

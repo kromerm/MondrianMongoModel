@@ -452,8 +452,15 @@ public class MainJFrame extends javax.swing.JFrame {
         int i=0;         // count # of fields
         int sampled=DEFAULTSAMPLE;
 
-         try {
+        try {
             config = new ConfigurationManager ("MongoModel.xml");
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this,e.getMessage(), "Warning: Config Manager", JOptionPane.WARNING_MESSAGE);         
+        }
+
+         try {
             int jj=0;
             jj = Integer.parseInt(config.getProperty("sampling"));
             if (jj < 1) {
@@ -462,13 +469,8 @@ public class MainJFrame extends javax.swing.JFrame {
             else {
                 sampled=jj;
             }
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this,e.getMessage(), "Warning", JOptionPane.WARNING_MESSAGE);         
-            sampled=DEFAULTSAMPLE;
-        }
-
+         } catch (Exception e) {sampled=DEFAULTSAMPLE;}
+         
         java.util.Date date= new java.util.Date();
 	jTextArea1.setText(new Timestamp(date.getTime())+": SAMPLING documents in MongoDB: "+ sampled );
         

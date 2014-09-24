@@ -171,7 +171,10 @@ public class jSettings extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this,"Sampling must be a number greater than 0", "Save Failed", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-        }catch (Exception e) {JOptionPane.showMessageDialog(this,"Sampling must be a number greater than 0", "Save Failed", JOptionPane.WARNING_MESSAGE);}
+        }catch (Exception e) {
+            JOptionPane.showMessageDialog(this,"Sampling must be a number greater than 0", "Save Failed", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         
         try {
             config.setProperty("olap4j",jTextField1.getText());
