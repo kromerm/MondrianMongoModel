@@ -9,3 +9,5 @@ Obviously, you will need a local JVM on whatever machine you use to run this pro
 Best, Mark
 
 UPDATED Sept 24 2014: You can now set and save the sampling size used by the modeling tool when it samples documents from your MongoDB collections. The default is 15. To change the sampling, go to File | Settings. You will see the sampling # being used in the text window at the bottom of the tool window when you click on "Sample Fields".
+
+Here is a video that I uploaded to YouTube to help walk you through how to use this tool to auto-generate and manage Pentaho Mondrian 4 schemas and OLAP4.properties connection settings specific to MongoDB analytics.
